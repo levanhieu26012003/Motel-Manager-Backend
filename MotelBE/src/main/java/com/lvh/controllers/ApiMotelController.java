@@ -4,8 +4,11 @@
  */
 package com.lvh.controllers;
 
+import com.lvh.pojo.Comment;
 import com.lvh.pojo.Motel;
+import com.lvh.services.CommentService;
 import com.lvh.services.MotelService;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -31,13 +34,27 @@ import org.springframework.web.multipart.MultipartFile;
  * @author admin
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/motels")
 public class ApiMotelController {
 
     @Autowired
     private MotelService motelSer;
+    
+    @Autowired
+    private CommentService cmtSer;
 
-    @GetMapping("/motels/")
+    @GetMapping("/{motelId}/comments")
+    @CrossOrigin
+    public ResponseEntity<List<Map<String, Object>>> listcmt(@RequestParam Map<String, String> params,@PathVariable(value = "motelId") Long id) {
+        List<Map<String, Object>> cmtMaps = new ArrayList<>();
+        for (Comment cmt : this.cmtSer.getComment(params, id)) {
+            cmtMaps.add(this.cmtSer.cmtToJson(cmt));
+        }
+
+        return new ResponseEntity<>(cmtMaps, HttpStatus.OK);
+    }
+    
+    @GetMapping("/")
     @CrossOrigin
     public ResponseEntity<List<Map<String, Object>>> list(@RequestParam Map<String, String> params) {
         List<Map<String, Object>> motelMaps = new ArrayList<>();
@@ -48,7 +65,7 @@ public class ApiMotelController {
         return new ResponseEntity<>(motelMaps, HttpStatus.OK);
     }
 
-    @PostMapping(path = "/motel/", consumes = {
+    @PostMapping(path = "/", consumes = {
         MediaType.APPLICATION_JSON_VALUE,
         MediaType.MULTIPART_FORM_DATA_VALUE
     })
@@ -60,8 +77,10 @@ public class ApiMotelController {
     }
 
     
-    @DeleteMapping(path = "/motel/{motelId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public void deleteMotel(@PathVariable(value = "motelId") Long id, HttpSession session) {
+    @DeleteMapping(path = "/{motelId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteMotel(@PathVariable(value = "motelId") Long id) {
+        
         this.motelSer.deleteMotel(id);
     }
 }

@@ -24,6 +24,7 @@ import javax.transaction.Transactional;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
@@ -35,6 +36,7 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @Repository
 @Transactional
+@PropertySource("classpath:configs.properties")
 public class MotelRepositoryImpl implements MotelRepository {
 
     @Autowired
@@ -43,8 +45,6 @@ public class MotelRepositoryImpl implements MotelRepository {
     @Autowired
     private ImageService imgService;
 
-    @Autowired
-    private MotelService motelService;
 
     @Autowired
     private UserService userService;
@@ -93,7 +93,7 @@ public class MotelRepositoryImpl implements MotelRepository {
 
         String p = params.get("page");
         if (p != null && !p.isEmpty()) {
-            int pageSize = Integer.parseInt(env.getProperty("motel.pageSize").toString());
+            int pageSize = Integer.parseInt(env.getProperty("motels.pageSize").toString());
             int start = (Integer.parseInt(p) - 1) * pageSize;
             query.setFirstResult(start);
             query.setMaxResults(pageSize);

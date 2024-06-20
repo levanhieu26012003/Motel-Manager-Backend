@@ -14,16 +14,10 @@ import org.springframework.web.multipart.MultipartFile;
  * @author levan
  */
 public interface MotelRepository {
-
     Map<String, Object> motelToJson(Motel motel);
-
     Motel jsonToMotel(Map<String, String> params,List<MultipartFile> files);
-
     List<Motel> getMotel(Map<String, String> params);
-
     void saveOrUpdateMotel(Motel m);
-
     Motel getMotelById(Long id);
-
-    void deleteMotel(Long id);
+    void deleteMotel(Long id);    
 }

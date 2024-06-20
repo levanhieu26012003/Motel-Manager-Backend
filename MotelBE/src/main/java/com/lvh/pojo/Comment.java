@@ -17,6 +17,8 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -46,7 +48,7 @@ public class Comment implements Serializable {
     @Column(name = "id")
     private Long id;
     @Column(name = "active")
-    private Boolean active;
+    private Boolean active = true;
     @Column(name = "created_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
@@ -169,5 +171,14 @@ public class Comment implements Serializable {
     public String toString() {
         return "com.lvh.pojo.Comment[ id=" + id + " ]";
     }
-    
+    @PrePersist
+    protected void onCreate() {
+        createdDate = new Date();
+        updatedDate = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedDate = new Date();
+    }
 }
