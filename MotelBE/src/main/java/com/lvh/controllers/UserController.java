@@ -4,7 +4,6 @@
  */
 package com.lvh.controllers;
 
-import com.lvh.services.MotelService;
 import com.lvh.services.UserService;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;

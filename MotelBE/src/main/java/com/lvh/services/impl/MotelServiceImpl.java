@@ -39,26 +39,23 @@ public class MotelServiceImpl
     private ImageRepository imgRepo;
 
     @Override
-    public List<Map<String, Object>> getMotel(Map<String, String> params) {
+    public List<Motel> getMotel(Map<String, String> params) {
         return this.motelRepo.getMotel(params);
     }
 
     @Override
     @Transactional
-    public void addMotel(Motel motel) {
+    public void saveOrUpdateMotel(Motel motel) {
 
-        this.motelRepo.saveMotel(motel);
+        this.motelRepo.saveOrUpdateMotel(motel);
+        
+        System.out.println(motel.getFiles().size());
 
-        // Upload images to Cloudinary and save Image entities
+        
         if (motel.getFiles().size() > 1) {
-            System.out.println("VAOOO IFFFFFFFFF");
-            System.out.println(motel.getFiles());
-            System.out.println(motel.getFiles().size());
-            System.out.println("VAOOO IFFFFFFFFF sauuuuuuuu");
-
             for (MultipartFile image : motel.getFiles()) {
                 Map uploadResult;
-
+                System.out.println("zzzzzzzzzzoooooooooooo");
                 try {
                     uploadResult = cloudinary.uploader().upload(image.getBytes(), ObjectUtils.emptyMap());
                     String url = (String) uploadResult.get("url");
@@ -72,14 +69,8 @@ public class MotelServiceImpl
                     Logger.getLogger(MotelServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-        } else {
-            System.out.println("VAOOO ELSEEEEE");
         }
-    }
 
-    @Override
-    public Map<String, Object> getMotelById(Long id) {
-        return this.motelRepo.getMotelById(id);
     }
 
     @Override
@@ -88,13 +79,18 @@ public class MotelServiceImpl
     }
 
     @Override
-    public void approvedMotel(Long id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Motel getMotelById(Long id) {
+        return this.motelRepo.getMotelById(id);
     }
 
     @Override
-    public Motel getMotelByIdObject(Long id) {
-        return this.motelRepo.getMotelByIdObject(id);
+    public Map<String, Object> motelToJson(Motel motel) {
+        return this.motelRepo.motelToJson(motel);
+    }
+
+    @Override
+    public Motel jsonToMotel(Map<String, String> params, List<MultipartFile> files) {
+        return this.motelRepo.jsonToMotel(params, files);
     }
 
 }

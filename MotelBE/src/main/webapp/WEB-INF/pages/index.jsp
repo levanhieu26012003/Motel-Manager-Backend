@@ -30,8 +30,8 @@
         <td>${motel.price}</td>
 
         <td>
-            <a class="btn btn-info" href="<c:url value="/motels/${motel.id}" />">Xem</a>
-            <button onclick="deleteProduct('${url}',${p.id})" class="btn btn-danger">Xóa</button>
+            <a class="btn btn-info m-1" href="<c:url value="/motels/${motel.id}" />">Xem</a>
+            <a class="btn btn-danger m-1" href="<c:url value="/motels/delete/${motel.id}" />">Xóa</a>
         </td>        
     </tr>
 </c:forEach>

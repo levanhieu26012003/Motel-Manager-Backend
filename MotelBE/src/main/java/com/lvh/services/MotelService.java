@@ -7,6 +7,7 @@ package com.lvh.services;
 import com.lvh.pojo.Motel;
 import java.util.List;
 import java.util.Map;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -14,16 +15,15 @@ import java.util.Map;
  */
 public interface MotelService {
 
-    public List<Map<String, Object>> getMotel(Map<String, String> params);
+   Map<String, Object> motelToJson(Motel motel);
 
-    void addMotel(Motel motel);
+    Motel jsonToMotel(Map<String, String> params,List<MultipartFile> files);
 
-    Map<String, Object> getMotelById(Long id);
-    
-    Motel getMotelByIdObject(Long id);
+    List<Motel> getMotel(Map<String, String> params);
 
+    void saveOrUpdateMotel(Motel m);
+
+    Motel getMotelById(Long id);
 
     void deleteMotel(Long id);
-
-    void approvedMotel(Long id);
 }

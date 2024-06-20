@@ -6,13 +6,22 @@ package com.lvh.controllers;
 
 import com.lvh.pojo.Motel;
 import com.lvh.services.MotelService;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.multipart.MultipartFile;
 /**
  *
  * @author levan
@@ -28,10 +37,12 @@ public class MotelController {
         return "motels"; // Tên định nghĩa trong tiles.xml
     }
     
+    
+    
     @PostMapping("/motels")
     public String createProduct(@ModelAttribute(value ="motel")Motel m) {
         try {
-                this.motelService.addMotel(m);
+                this.motelService.saveOrUpdateMotel(m);
                 return "redirect:/";
             } catch (Exception ex) {
                 System.err.println(ex.getMessage());
@@ -39,10 +50,16 @@ public class MotelController {
         return "motels";
     }
     
-     @GetMapping("/motels/{motelId}")
+    @GetMapping("/motels/{motelId}")
     public String updateView(Model model, @PathVariable(value = "motelId") Long id) {
-        model.addAttribute("motel", this.motelService.getMotelByIdObject(id));
+        model.addAttribute("motel", this.motelService.getMotelById(id));
         return "motels";
+    }
+    
+    @GetMapping("/motels/delete/{motelId}")
+    public String deleteMotel(Model model, @PathVariable(value = "motelId") Long id) {
+        this.motelService.deleteMotel(id);
+        return "redirect:/";
     }
     
 }

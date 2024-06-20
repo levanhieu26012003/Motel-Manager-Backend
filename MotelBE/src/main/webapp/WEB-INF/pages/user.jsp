@@ -12,27 +12,31 @@
         <form:input class="form-control" id="title" path="username" />
     </div>
 
-    
-            <div class="form-floating mb-3 mt-3">
-                <label for="title">password</label>
-                <form:input class="form-control" id="title" path="password" />
-            </div>
-        
+
+    <div class="form-floating mb-3 mt-3">
+        <label for="title">password</label>
+        <form:input class="form-control" id="title" path="password" />
+    </div>
+
 
     <div class="form-floating mb-3 mt-3">
         <label for="title">Email</label>
         <form:input class="form-control"  path="email" />
     </div>
 
-    <div class="form-floating mb-3 mt-3">
-        <label for="title">Role</label>
-        <form:input class="form-control"  path="userRole" />
+    <div class="form-floating">
+        <label class="form-label">Danh mục:</label>
+
+        <form:select class="form-select"  path="userRole">
+            <option value="ROLE_USER_TENANT" selected>ROLE_USER_TENANT</option>
+            <option value="ROLE_USER_HOST" selected>ROLE_USER_HOST</option>
+            <option value="ROLE_ADMIN" selected>ROLE_ADMIN</option>
+        </form:select>
     </div>
 
 
     <div class="form-floating mb-3 mt-3 image-container">
         <form:input type="file" class="form-control"  id="image" path="file"  />
-        <label for="image">Ảnh sản phẩm</label>
 
         <c:if test="${user.id > 0}">
             <div class="image-wrapper"

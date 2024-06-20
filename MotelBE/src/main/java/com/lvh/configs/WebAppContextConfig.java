@@ -62,7 +62,7 @@ public class WebAppContextConfig implements WebMvcConfigurer {
         return validator();
     }
 
-    @Bean
+    @Bean(name = "multipartResolver")
     public CommonsMultipartResolver multipartResolver() {
         CommonsMultipartResolver resolver
                 = new CommonsMultipartResolver();

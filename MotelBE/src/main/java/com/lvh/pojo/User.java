@@ -4,6 +4,7 @@
  */
 package com.lvh.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
@@ -92,13 +93,18 @@ public class User implements Serializable {
         @JoinColumn(name = "follower_id", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "followed_id", referencedColumnName = "id")})
     @ManyToMany
+    @JsonIgnore
     private Collection<User> userCollection;
     @ManyToMany(mappedBy = "userCollection")
+    @JsonIgnore
     private Collection<User> userCollection1;
     @OneToMany(mappedBy = "userId")
+    @JsonIgnore
     private Collection<Searchinfo> searchinfoCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+    @JsonIgnore
     private Collection<Comment> commentCollection;
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Collection<Motel> motelCollection;
     

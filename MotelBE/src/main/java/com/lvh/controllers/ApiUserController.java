@@ -46,23 +46,22 @@ public class ApiUserController {
     @ResponseStatus(HttpStatus.CREATED)
     @CrossOrigin
     public void create(@RequestParam Map<String, String> params, @RequestPart MultipartFile[] file) {
-        User u = new User();
-        u.setUsername(params.get("username"));
-        u.setEmail(params.get("email"));
-        u.setPassword(params.get("password"));
-        u.setUserRole( params.get("userrole"));
-        u.setActive(true);
-        if (file.length > 0)
-            u.setFile(file[0]);
-        
+        User u = this.userService.jsonToUser(params, file);
+    
         this.userService.addUser(u);
     }
     
     @PostMapping("/login/")
     @CrossOrigin
-    public ResponseEntity<String> login(@RequestBody User user) {
-        if (this.userService.authUser(user.getUsername(), user.getPassword()) == true) {
-            String token = this.jwtService.generateTokenLogin(user.getUsername());
+    public ResponseEntity<String> login(@RequestParam Map<String, String> user) {
+        User u = this.userService.jsonToUser(user, null);
+        System.out.println("POST USSSSSSSSS");
+        System.out.println(user);
+        System.out.println("POST USSSSSSSSS");
+
+
+        if (this.userService.authUser(u.getUsername(), u.getPassword()) == true) {
+            String token = this.jwtService.generateTokenLogin(u.getUsername());
             
             return new ResponseEntity<>(token, HttpStatus.OK);
         }

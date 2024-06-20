@@ -22,6 +22,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -32,7 +33,7 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepo;
-    
+
     @Autowired
     private Cloudinary cloudinary;
 
@@ -62,7 +63,7 @@ public class UserServiceImpl implements UserService {
             }
         }
 
-        this.userRepo.addUser(user);
+        this.userRepo.saveOrUpdateUser(user);
     }
 
     @Override
@@ -70,18 +71,23 @@ public class UserServiceImpl implements UserService {
         return this.userRepo.authUser(username, password);
     }
 
-   @Override
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User u = this.userRepo.getUserByUserName(username);
         if (u == null) {
             throw new UsernameNotFoundException("Không tồn tại!");
         }
-      
+
         Set<GrantedAuthority> authorities = new HashSet<>();
         authorities.add(new SimpleGrantedAuthority(u.getUserRole()));
-        
+
         return new org.springframework.security.core.userdetails.User(
                 u.getUsername(), u.getPassword(), authorities);
+    }
+
+    @Override
+    public User jsonToUser(Map<String, String> params, MultipartFile[] file) {
+        return this.userRepo.jsonToUser(params, file);
     }
 
 }

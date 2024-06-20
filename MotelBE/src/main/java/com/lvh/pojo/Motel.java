@@ -11,6 +11,7 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -62,7 +63,7 @@ public class Motel implements Serializable {
     @Column(name = "id")
     private Long id;
     @Column(name = "active")
-    private Boolean active;
+    private Boolean active = true;
     @Column(name = "created_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
@@ -103,8 +104,8 @@ public class Motel implements Serializable {
     private String province;
     @Size(max = 20)
     @Column(name = "status")
-    private String status;
-    @OneToMany(mappedBy = "motelId")
+    private String status = "PENDING";
+    @OneToMany(mappedBy = "motelId", fetch = FetchType.EAGER)
     private Collection<Image> imageCollection;
     @OneToMany(mappedBy = "houseId")
     private Collection<Comment> commentCollection;

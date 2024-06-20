@@ -49,17 +49,16 @@
 
     <div class="form-floating mb-3 mt-3 image-container">
         <form:input type="file" class="form-control"  id="image" path="files" mutiple="mutiple" />
-        <label for="image">Ảnh sản phẩm</label>
 
         <c:if test="${motel.id > 0}">
             <c:forEach items="${motel.imageCollection}" var="img">
-                <div class="image-wrapper"
-                        <img  src="${img.url}" width="200" class="img-fluid" />
-                </div>
+                     <img class="m-2"  src="${img.url}" width="200" class="img-fluid" />
             </c:forEach>
         </c:if>
     </div>
     <div class="form-floating">
+        <label class="form-label">Người dùng:</label>
+
         <form:select class="form-select"  path="userId">
             <c:forEach items="${users}" var="c">
                 <c:choose>
@@ -72,17 +71,26 @@
                 </c:choose>
             </c:forEach>
         </form:select>
-        <label for="categoryId" class="form-label">Danh mục:</label>
     </div>
     <div class="form-floating">
-        <button class="btn btn-info mt-1" type="submit">
-            <c:choose>
-                <c:when test="${motel.id > 0}"> Cập nhât sản phẩm</c:when>
-                <c:otherwise> Thêm sản phẩm</c:otherwise>
-            </c:choose>
-        </button>
+        <c:choose>
+            <c:when test="${motel.status == 'PENDING'}"> 
+                <button class="btn btn-info ml-5 mt-1" type="submit">
+                    Duyệt
+                </button>
+            </c:when>
+            <c:when test="${motel.id > 0}"> 
+                <button class="btn btn-info mt-1" type="submit">
+                    Cập nhât sản phẩm
+                </button>
+            </c:when>
+            <c:otherwise>
+                <button class="btn btn-info mt-1" type="submit">
+                    Thêm
+                </button>
+            </c:otherwise>
+        </c:choose>
         <form:hidden path="id" />
-
     </form:form>
 
 
