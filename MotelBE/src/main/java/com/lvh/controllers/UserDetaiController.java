@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  *
@@ -40,7 +41,7 @@ public class UserDetaiController {
         return "user";
     }
     
-     @GetMapping("/user/{username}")
+    @GetMapping("/user/{username}")
     public String updateView(Model model, @PathVariable(value = "username") String username) {
         model.addAttribute("user", this.userService.getUserByUserName(username));
         return "user";

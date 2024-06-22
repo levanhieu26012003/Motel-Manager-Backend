@@ -19,6 +19,8 @@ public interface UserService extends UserDetailsService {
     List<User> getUsers();
 
     User getUserByUserName(String username);
+    
+    User getUserById(Long id);
 
     Map<String, Object> ChangeJson(User user);
 
@@ -27,5 +29,7 @@ public interface UserService extends UserDetailsService {
     boolean authUser(String username, String password);
 
     User jsonToUser(Map<String, String> params, MultipartFile[] file);
+    
+
 
 }

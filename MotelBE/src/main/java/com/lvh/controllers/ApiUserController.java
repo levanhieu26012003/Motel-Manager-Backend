@@ -14,8 +14,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(origins = {"*"})
 public class ApiUserController {
     @Autowired
     private BCryptPasswordEncoder passswordEncoder;
@@ -39,26 +42,22 @@ public class ApiUserController {
     @Autowired
     private JwtService jwtService;
     
-    @PostMapping(path = "/user/", consumes = {
+    @PostMapping(path = "/users/", consumes = {
         MediaType.APPLICATION_JSON_VALUE,
         MediaType.MULTIPART_FORM_DATA_VALUE
     })
     @ResponseStatus(HttpStatus.CREATED)
     @CrossOrigin
-    public void create(@RequestParam Map<String, String> params, @RequestPart MultipartFile[] file) {
+    public void create(@RequestBody Map<String, String> params, @RequestPart MultipartFile[] file) {
         User u = this.userService.jsonToUser(params, file);
     
         this.userService.addUser(u);
     }
     
     @PostMapping("/login/")
-    @CrossOrigin
-    public ResponseEntity<String> login(@RequestParam Map<String, String> user) {
+    @CrossOrigin(origins = {"*"})
+    public ResponseEntity<String> login(@RequestBody Map<String, String> user) {
         User u = this.userService.jsonToUser(user, null);
-        System.out.println("POST USSSSSSSSS");
-        System.out.println(user);
-        System.out.println("POST USSSSSSSSS");
-
 
         if (this.userService.authUser(u.getUsername(), u.getPassword()) == true) {
             String token = this.jwtService.generateTokenLogin(u.getUsername());
@@ -75,5 +74,13 @@ public class ApiUserController {
         User u = this.userService.getUserByUserName(p.getName());
         return new ResponseEntity<>(u, HttpStatus.OK);
     }
+    
+    @GetMapping("/user/{username}")
+    public ResponseEntity<User> getUser(Model model, @PathVariable(value = "username") String username) {
+        User u =  this.userService.getUserByUserName(username);
+        return new ResponseEntity<>(u, HttpStatus.OK);
+    }
+    
+    
 
 }

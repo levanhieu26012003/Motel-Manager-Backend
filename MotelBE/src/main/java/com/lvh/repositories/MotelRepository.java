@@ -20,4 +20,5 @@ public interface MotelRepository {
     void saveOrUpdateMotel(Motel m);
     Motel getMotelById(Long id);
     void deleteMotel(Long id);    
+    List<Motel> getMotelByUsername(String username);
 }

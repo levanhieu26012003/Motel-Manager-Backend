@@ -46,6 +46,11 @@ public class UserServiceImpl implements UserService {
     public User getUserByUserName(String username) {
         return this.userRepo.getUserByUserName(username);
     }
+    
+    @Override
+    public User getUserById(Long id) {
+        return this.userRepo.getUserById(id);
+    }
 
     @Override
     public Map<String, Object> ChangeJson(User user) {
@@ -54,7 +59,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void addUser(User user) {
-        if (!user.getFile().isEmpty()) {
+        if (user.getFile() != null) {
             try {
                 Map res = this.cloudinary.uploader().upload(user.getFile().getBytes(), ObjectUtils.asMap("resource_type", "auto"));
                 user.setAvatar(res.get("secure_url").toString());

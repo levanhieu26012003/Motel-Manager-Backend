@@ -28,31 +28,30 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class MotelServiceImpl
         implements MotelService {
-
+    
     @Autowired
     private MotelRepository motelRepo;
-
+    
     @Autowired
     private Cloudinary cloudinary;
-
+    
     @Autowired
     private ImageRepository imgRepo;
-
+    
     @Override
     public List<Motel> getMotel(Map<String, String> params) {
         return this.motelRepo.getMotel(params);
     }
-
+    
     @Override
     @Transactional
     public void saveOrUpdateMotel(Motel motel) {
-
+        
         this.motelRepo.saveOrUpdateMotel(motel);
         
         System.out.println(motel.getFiles().size());
-
         
-        if (motel.getFiles().size() > 1) {
+        if (motel.getFiles() != null) {
             for (MultipartFile image : motel.getFiles()) {
                 Map uploadResult;
                 System.out.println("zzzzzzzzzzoooooooooooo");
@@ -70,27 +69,32 @@ public class MotelServiceImpl
                 }
             }
         }
-
+        
     }
-
+    
     @Override
     public void deleteMotel(Long id) {
         this.motelRepo.deleteMotel(id);
     }
-
+    
     @Override
     public Motel getMotelById(Long id) {
         return this.motelRepo.getMotelById(id);
     }
-
+    
     @Override
     public Map<String, Object> motelToJson(Motel motel) {
         return this.motelRepo.motelToJson(motel);
     }
-
+    
     @Override
     public Motel jsonToMotel(Map<String, String> params, List<MultipartFile> files) {
         return this.motelRepo.jsonToMotel(params, files);
     }
-
+    
+    @Override
+    public List<Motel> getMotelByUsername(String username) {
+        return this.getMotelByUsername(username);
+    }
+    
 }

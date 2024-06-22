@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.lvh.repositories.impl;
+
 import com.lvh.pojo.User;
 import com.lvh.repositories.UserRepository;
 import java.util.HashMap;
@@ -43,7 +44,6 @@ public class UserRepositoryImpl implements UserRepository {
     public void saveOrUpdateUser(User user) {
         Session s = this.factoryBean.getObject().getCurrentSession();
         if (user.getId() != null) {
-            
             s.update(user);
         } else {
             user.setPassword(this.passEncoder.encode(user.getPassword()));
@@ -56,12 +56,7 @@ public class UserRepositoryImpl implements UserRepository {
         Session s = this.factoryBean.getObject().getCurrentSession();
         Query q = s.createQuery("FROM User WHERE username = :username");
         q.setParameter("username", username);
-        System.out.println("LAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-        System.out.println("LAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
-        System.out.println(q.getSingleResult());
-        System.out.println("LAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-        
         return (User) q.getSingleResult();
     }
 
@@ -90,21 +85,28 @@ public class UserRepositoryImpl implements UserRepository {
         User u = new User();
         u.setUsername(params.get("username"));
         u.setPassword(params.get("password"));
-        System.out.println("jsssssssssssssonnnnnnnnnnnn");
 
-        System.out.println(params.get("email"));
-        if (params.get("email") != null)
+        if (params.get("email") != null) {
             u.setEmail(params.get("email"));
-        if (params.get("userrole") != null)
+        }
+        if (params.get("userrole") != null) {
             u.setEmail(params.get("userrole"));
+        }
         u.setActive(true);
-        if (file != null)
+        if (file != null) {
             u.setFile(file[0]);
-        
-       return u;
+        }
+
+        return u;
     }
 
-    
-    
+    @Override
+    public User getUserById(Long id) {
+        Session s = this.factoryBean.getObject().getCurrentSession();
+        Query q = s.createQuery("FROM User WHERE id = :id");
+        q.setParameter("id", id);
+
+        return (User) q.getSingleResult();
+    }
 
 }

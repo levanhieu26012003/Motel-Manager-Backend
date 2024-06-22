@@ -163,7 +163,7 @@ public class Image implements Serializable {
         return "com.lvh.pojo.Image[ id=" + id + " ]";
     }
     
-     @PrePersist
+    @PrePersist
     protected void onCreate() {
         createdDate = new Date();
         updatedDate = new Date();

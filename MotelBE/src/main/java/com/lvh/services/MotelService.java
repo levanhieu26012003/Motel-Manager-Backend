@@ -26,4 +26,6 @@ public interface MotelService {
     Motel getMotelById(Long id);
 
     void deleteMotel(Long id);
+    
+    List<Motel> getMotelByUsername(String username);
 }

@@ -8,7 +8,9 @@ import com.lvh.pojo.Image;
 import com.lvh.pojo.Motel;
 import com.lvh.pojo.User;
 import com.lvh.repositories.MotelRepository;
+import com.lvh.services.FollowService;
 import com.lvh.services.ImageService;
+import com.lvh.services.MailService;
 import com.lvh.services.MotelService;
 import com.lvh.services.UserService;
 import java.util.ArrayList;
@@ -45,12 +47,17 @@ public class MotelRepositoryImpl implements MotelRepository {
     @Autowired
     private ImageService imgService;
 
-
     @Autowired
     private UserService userService;
 
     @Autowired
     private Environment env;
+
+    @Autowired
+    private MailService mailSer;
+    
+    @Autowired
+    private FollowService followlSer;
 
     @Override
     public List<Motel> getMotel(Map<String, String> params) {
@@ -66,12 +73,12 @@ public class MotelRepositoryImpl implements MotelRepository {
         if (wards != null && !wards.isEmpty()) {
             predicates.add(b.like(r.get("wards"), String.format("%%%s%%", wards)));
         }
-        
+
         String district = params.get("district");
         if (district != null && !district.isEmpty()) {
             predicates.add(b.like(r.get("district"), String.format("%%%s%%", district)));
         }
-        
+
         String province = params.get("province");
         if (province != null && !province.isEmpty()) {
             predicates.add(b.like(r.get("province"), String.format("%%%s%%", province)));
@@ -98,15 +105,21 @@ public class MotelRepositoryImpl implements MotelRepository {
             query.setFirstResult(start);
             query.setMaxResults(pageSize);
         }
-        return query.getResultList();  
+        return query.getResultList();
     }
 
     @Override
     public void saveOrUpdateMotel(Motel m) {
         Session s = this.factoryBean.getObject().getCurrentSession();
         if (m.getId() != null) {
-            if(m.getStatus() == "PENDING")
+            if (m.getStatus() == "PENDING") {
                 m.setStatus("APPROVED");
+                for (User user : this.followlSer.listFollower(m.getUserId().getId())) {
+                         String subject = "New post approved!";
+                        String text = "A new post by " + m.getUserId().getUsername() + " has been approved. Check it out!";
+                    this.mailSer.sendMail(user.getEmail(), subject, text);
+                }
+            }
             s.update(m);
         } else {
             s.save(m);
@@ -130,7 +143,6 @@ public class MotelRepositoryImpl implements MotelRepository {
             throw new RuntimeException("Motel not found with ID: " + id);
         }
     }
-
 
     @Override
     public Map<String, Object> motelToJson(Motel motel) {
@@ -166,7 +178,7 @@ public class MotelRepositoryImpl implements MotelRepository {
         u.setAddress(params.get("address"));
         u.setWards(params.get("wards"));
         u.setDistrict(params.get("district"));
-            u.setProvince(params.get("province"));
+        u.setProvince(params.get("province"));
 
         User user = this.userService.getUserByUserName(params.get("username"));
         u.setUserId(user);
@@ -174,5 +186,13 @@ public class MotelRepositoryImpl implements MotelRepository {
         return u;
     }
 
-    
+    @Override
+    @Transactional
+    public List<Motel> getMotelByUsername(String username) {
+        User u = this.userService.getUserByUserName(username);
+        List<Motel> rs = new  ArrayList<>(u.getMotelCollection());
+        return rs;
+        
+    }
+
 }
