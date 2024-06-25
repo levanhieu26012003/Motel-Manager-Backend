@@ -38,7 +38,7 @@ public class ApiCommentController {
     @Autowired
     private CommentSecurityService cmtSecuSer;
 
-    @PostMapping(path = "/", consumes = {
+    @PostMapping(path = "", consumes = {
         MediaType.APPLICATION_JSON_VALUE,
         MediaType.MULTIPART_FORM_DATA_VALUE
     })

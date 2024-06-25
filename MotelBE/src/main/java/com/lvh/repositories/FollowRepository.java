@@ -16,7 +16,7 @@ public interface FollowRepository {
 
     List<User> listHost(Long id);
 
-    void addFollow(Long followerId, Long followedId);
+    void addFollow(Long followerId, Long hostId);
     
-    void removeFollow(Long followerId, Long followedId);
+    void removeFollow(Long followerId, Long hostId);
 }

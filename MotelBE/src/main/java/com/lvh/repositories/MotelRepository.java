@@ -21,4 +21,5 @@ public interface MotelRepository {
     Motel getMotelById(Long id);
     void deleteMotel(Long id);    
     List<Motel> getMotelByUsername(String username);
+    Map<String, Object> getMotelAPI(Map<String, String> params);
 }

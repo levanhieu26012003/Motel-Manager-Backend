@@ -34,7 +34,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @ComponentScan(basePackages = {
     "com.lvh.controllers",
     "com.lvh.repositories",
-    "com.lvh.services"
+    "com.lvh.services",
+    "com.lvh.componants"
 })
 @Order(2)
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -58,9 +59,13 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http)
             throws Exception {
         http.formLogin().usernameParameter("username").passwordParameter("password");
-
+        
+//        http.authorizeRequests().anyRequest().authenticated();
+        
         http.formLogin().defaultSuccessUrl("/")
-                .failureUrl("/login?error");
+                .failureUrl("/login?error")
+                .loginPage("/login");
+        
         http.logout().logoutSuccessUrl("/login");
 
         http.exceptionHandling()
@@ -71,38 +76,56 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 //        .antMatchers("/**/pay")
 //                .access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
         http.csrf().disable();
-    }
-    
-    @Bean
-    public Cloudinary cloudinary() {
-        Cloudinary cloudinary
-                = new Cloudinary(ObjectUtils.asMap(
-                        "cloud_name", "dlkfozznl",
-                        "api_key", "216689541712763",
-                        "api_secret", "m_IQI6lLGClNtrf8ZeuG97Do4Fs",
-                        "secure", true));
-        return cloudinary;
-    }
-    
-    @Bean
-    public JavaMailSender getJavaMailSend(){
-        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        
-        mailSender.setHost("smtp.gmail.com");
-        mailSender.setPort(587);
-        mailSender.setUsername("msang.nms@gmail.com");
-        mailSender.setPassword("gfsi yjbi cavj mrmj");
-        
-        Properties javaMailProperties = new Properties();
-        
-        javaMailProperties.put("mail.smtp.starttls.enable", "true");
-        javaMailProperties.put("mail.smtp.auth", "true");
-        javaMailProperties.put("mail.transport.protocol", "smtp");
-        javaMailProperties.put("mail.debug", "true");
-        
-        mailSender.setJavaMailProperties(javaMailProperties);
-        
-        return mailSender;
+//        http
+//                .authorizeRequests()
+//                .antMatchers("/login", "/resources/**", "/css/**", "/js/**").permitAll() // Cho phép truy cập vào trang login và các tài nguyên tĩnh
+//                .antMatchers("/**").hasRole("ADMIN") // Chỉ cho phép người dùng có role ADMIN truy cập vào trang admin
+//                .anyRequest().authenticated() // Yêu cầu xác thực cho tất cả các yêu cầu khác
+//                .and()
+//                .formLogin()
+//                .loginPage("/login") // Thiết lập trang login tùy chỉnh
+//                .defaultSuccessUrl("/", true) // Chuyển hướng đến trang chủ sau khi đăng nhập thành công
+//                .permitAll()
+//                .and()
+//                .logout()
+//                .permitAll();
+//    }
     }
 
-}
+        @Bean
+        public Cloudinary cloudinary
+        
+            () {
+        Cloudinary cloudinary
+                    = new Cloudinary(ObjectUtils.asMap(
+                            "cloud_name", "dlkfozznl",
+                            "api_key", "216689541712763",
+                            "api_secret", "m_IQI6lLGClNtrf8ZeuG97Do4Fs",
+                            "secure", true));
+            return cloudinary;
+        }
+
+        @Bean
+        public JavaMailSender getJavaMailSend
+        
+            () {
+        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+
+            mailSender.setHost("smtp.gmail.com");
+            mailSender.setPort(587);
+            mailSender.setUsername("levanhieu26012003@gmail.com");
+            mailSender.setPassword("qjpw wfda arwp emls");
+
+            Properties javaMailProperties = new Properties();
+
+            javaMailProperties.put("mail.smtp.starttls.enable", "true");
+            javaMailProperties.put("mail.smtp.auth", "true");
+            javaMailProperties.put("mail.transport.protocol", "smtp");
+            javaMailProperties.put("mail.debug", "true");
+
+            mailSender.setJavaMailProperties(javaMailProperties);
+
+            return mailSender;
+        }
+
+    }

@@ -8,10 +8,15 @@ package com.lvh.controllers;
 
 import com.lvh.services.StatsService;
 import java.time.LocalDate;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  *
@@ -24,10 +29,17 @@ public class StatsController {
 
     
     @GetMapping("/stats")
-    public String statsView(Model model) {
-        
-        model.addAttribute("statsUser", statsService.statsUserByPeriod(LocalDate.now().getYear(), "MONTH"));
+    public String statsView(Model model,@RequestParam Map<String, String> params) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+           String year = params.getOrDefault("year", String.valueOf(LocalDate.now().getYear()));
+        String period = params.getOrDefault("period", "MONTH");
+        model.addAttribute("statsUser", statsService.statsUserByPeriod(Integer.parseInt(year), period));
         
         return "stats";
+        } else {
+            return "login";
+        }
+        
     }
 }

@@ -8,6 +8,7 @@ import com.lvh.components.JwtService;
 import com.lvh.pojo.User;
 import com.lvh.services.UserService;
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,19 +43,19 @@ public class ApiUserController {
     @Autowired
     private JwtService jwtService;
     
-    @PostMapping(path = "/users/", consumes = {
+    @PostMapping(path = "/users", consumes = {
         MediaType.APPLICATION_JSON_VALUE,
         MediaType.MULTIPART_FORM_DATA_VALUE
     })
     @ResponseStatus(HttpStatus.CREATED)
     @CrossOrigin
-    public void create(@RequestBody Map<String, String> params, @RequestPart MultipartFile[] file) {
+    public void create(@RequestParam Map<String, String> params, @RequestPart MultipartFile[] file) {
         User u = this.userService.jsonToUser(params, file);
     
         this.userService.addUser(u);
     }
     
-    @PostMapping("/login/")
+    @PostMapping("/login")
     @CrossOrigin(origins = {"*"})
     public ResponseEntity<String> login(@RequestBody Map<String, String> user) {
         User u = this.userService.jsonToUser(user, null);
@@ -68,7 +69,7 @@ public class ApiUserController {
         return new ResponseEntity<>("error", HttpStatus.BAD_REQUEST);
     }
     
-    @GetMapping(path = "/current-user/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/current-user", produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin
     public ResponseEntity<User> getCurrentUser(Principal p) {
         User u = this.userService.getUserByUserName(p.getName());
@@ -76,9 +77,16 @@ public class ApiUserController {
     }
     
     @GetMapping("/user/{username}")
-    public ResponseEntity<User> getUser(Model model, @PathVariable(value = "username") String username) {
-        User u =  this.userService.getUserByUserName(username);
-        return new ResponseEntity<>(u, HttpStatus.OK);
+    @CrossOrigin
+    public ResponseEntity<Map<String,String>> getUser(Model model, @PathVariable(value = "username") String username) {
+        User user =  this.userService.getUserByUserName(username);
+        Map<String, String> userMap = new HashMap<>();
+
+        userMap.put("username", user.getUsername());
+        userMap.put("email", user.getEmail());
+        userMap.put("avatar", user.getAvatar());
+
+        return new ResponseEntity<>(userMap, HttpStatus.OK);
     }
     
     

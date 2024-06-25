@@ -8,12 +8,16 @@ import com.lvh.services.MotelService;
 import com.lvh.services.UserService;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
 /**
  *
  * @author levan
@@ -21,20 +25,28 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @ControllerAdvice
 public class IndexController {
+
     @Autowired
     private MotelService motelService;
-    
+
     @Autowired
     private UserService userService;
-    
+
     @ModelAttribute
     public void commonAttr(Model model) {
         model.addAttribute("users", this.userService.getUsers());
     }
-    
-    @RequestMapping("/")
-    public String index(Model model,@RequestParam Map<String, String> params){
-        model.addAttribute("motels", this.motelService.getMotel(params)); 
+
+    @RequestMapping("")
+    public String index(Model model, @RequestParam Map<String, String> params) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+            // Người dùng đã đăng nhập
+            model.addAttribute("motels", this.motelService.getMotel(params));
             return "index";
+        } else {
+            return "login";
+        }
+
     }
 }

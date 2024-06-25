@@ -4,8 +4,6 @@
  */
 package com.lvh.controllers;
 
-import com.lvh.components.JwtService;
-
 import com.lvh.pojo.User;
 import com.lvh.services.FollowService;
 import com.lvh.services.UserService;
@@ -19,12 +17,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -42,41 +39,36 @@ public class ApiFollowController {
     @Autowired
     private FollowService followSer;
 
-    @PostMapping(path = "/", consumes = {
+    @PostMapping(path = "", consumes = {
         MediaType.APPLICATION_JSON_VALUE,
         MediaType.MULTIPART_FORM_DATA_VALUE})
     @CrossOrigin
-    public ResponseEntity<String> create(@RequestBody Map<String, String> params) {
-        Long followerId = Long.parseLong(params.get("followerid"));
-        Long followedId = Long.parseLong(params.get("followedid"));
-        this.followSer.addFollow(followerId, followedId);
+    public ResponseEntity<String> create(@RequestParam Map<String, String> params, Principal p) {
+        try {
+            User follower = this.userService.getUserByUserName(p.getName());
+            Long followerId = follower.getId();
+            Long hostId = Long.parseLong(params.get("hostId"));
+            this.followSer.addFollow(followerId, hostId);
 
-        return new ResponseEntity<>("Created", HttpStatus.CREATED);
+            return new ResponseEntity<>("Created", HttpStatus.CREATED);
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+        return new ResponseEntity<>("BAD REQUEST", HttpStatus.BAD_REQUEST);
+
     }
 
-    @DeleteMapping(path = "/", consumes = {
-        MediaType.APPLICATION_JSON_VALUE,
-        MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<String> remove(@RequestBody Map<String, String> params, Principal p) {
-        Long followerId = Long.parseLong(params.get("followerid"));
-        Long followedId = Long.parseLong(params.get("followedid"));
-//        User follower = this.userService.getUserById(followerId);
-//        String name = p.getName();
+    @PostMapping(path = "/unfollow", consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<String> remove(@RequestParam Map<String, String> params, Principal p) {
+        User follower = this.userService.getUserByUserName(p.getName());
+        Long followerId = follower.getId();
+        Long hostId = Long.parseLong(params.get("hostId"));
+        this.followSer.removeFollow(followerId, hostId);
 
-//        System.out.println("nguoi gui");
-//        System.out.println(name);
-//
-//        System.out.println("nguoi nhan");
-//        System.out.println(follower.getUsername());
-//        System.out.println(p.getName().equals(follower.getUsername()));
-//        if (p.getName() != follower.getUsername()) {
-//            return new ResponseEntity<>("Bad request", HttpStatus.UNAUTHORIZED);
-//        }
-        this.followSer.removeFollow(followerId, followedId);
         return new ResponseEntity<>("Removed", HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("follower/{followerId}/")
+    @GetMapping("/follower/{followerId}")
     @CrossOrigin
     public ResponseEntity<List<Map<String, Object>>> listFollower(@PathVariable(value = "followerId") Long id) {
         List<Map<String, Object>> userMaps = new ArrayList<>();
@@ -87,7 +79,7 @@ public class ApiFollowController {
         return new ResponseEntity<>(userMaps, HttpStatus.OK);
     }
 
-    @GetMapping("followed/{followedId}/")
+    @GetMapping("/followed/{followedId}")
     @CrossOrigin
     public ResponseEntity<List<Map<String, Object>>> listHost(@PathVariable(value = "followedId") Long id) {
         List<Map<String, Object>> userMaps = new ArrayList<>();

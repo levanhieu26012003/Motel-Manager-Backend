@@ -53,14 +53,14 @@ import org.springframework.web.multipart.MultipartFile;
     @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email")})
 public class User implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
     private Long id;
     @Column(name = "active")
-    private Boolean active;
+    private Boolean active = true;
     @Column(name = "created_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
@@ -91,13 +91,13 @@ public class User implements Serializable {
     private String email;
     @JoinTable(name = "follows", joinColumns = {
         @JoinColumn(name = "follower_id", referencedColumnName = "id")}, inverseJoinColumns = {
-        @JoinColumn(name = "followed_id", referencedColumnName = "id")})
+        @JoinColumn(name = "host_id", referencedColumnName = "id")})
     @ManyToMany
     @JsonIgnore
-    private Collection<User> userCollection;
-    @ManyToMany(mappedBy = "userCollection")
+    private Collection<User> followers;
+    @ManyToMany(mappedBy = "followers")
     @JsonIgnore
-    private Collection<User> userCollection1;
+    private Collection<User> hosts;
     @OneToMany(mappedBy = "userId")
     @JsonIgnore
     private Collection<Searchinfo> searchinfoCollection;
@@ -198,21 +198,21 @@ public class User implements Serializable {
     }
 
     @XmlTransient
-    public Collection<User> getUserCollection() {
-        return userCollection;
+    public Collection<User> getFollowers() {
+        return followers;
     }
 
-    public void setUserCollection(Collection<User> userCollection) {
-        this.userCollection = userCollection;
+    public void setFollower(Collection<User> userCollection) {
+        this.followers = userCollection;
     }
 
     @XmlTransient
-    public Collection<User> getUserCollection1() {
-        return userCollection1;
+    public Collection<User> getHosts() {
+        return hosts;
     }
 
-    public void setUserCollection1(Collection<User> userCollection1) {
-        this.userCollection1 = userCollection1;
+    public void setHosts(Collection<User> userCollection1) {
+        this.hosts = userCollection1;
     }
 
     @XmlTransient
@@ -245,7 +245,7 @@ public class User implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (getId() != null ? getId().hashCode() : 0);
         return hash;
     }
 
@@ -256,7 +256,7 @@ public class User implements Serializable {
             return false;
         }
         User other = (User) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.getId() == null && other.getId() != null) || (this.getId() != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -264,7 +264,7 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "com.lvh.pojo.User[ id=" + id + " ]";
+        return "com.lvh.pojo.User[ id=" + getId() + " ]";
     }
 
     /**
@@ -283,12 +283,22 @@ public class User implements Serializable {
     
     @PrePersist
     protected void onCreate() {
-        createdDate = new Date();
-        updatedDate = new Date();
+        setCreatedDate(new Date());
+        setUpdatedDate(new Date());
     }
 
     @PreUpdate
     protected void onUpdate() {
-        updatedDate = new Date();
+        setUpdatedDate(new Date());
     }
+
+    /**
+     * @return the serialVersionUID
+     */
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+  
+    
 }

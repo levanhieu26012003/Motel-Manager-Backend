@@ -14,8 +14,6 @@ import com.lvh.services.MotelService;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,9 +47,9 @@ public class MotelServiceImpl
         
         this.motelRepo.saveOrUpdateMotel(motel);
         
-        System.out.println(motel.getFiles().size());
+        System.out.println(motel.getFiles());
         
-        if (motel.getFiles() != null) {
+        if (motel.getFiles().get(0).getSize() > 0) {
             for (MultipartFile image : motel.getFiles()) {
                 Map uploadResult;
                 System.out.println("zzzzzzzzzzoooooooooooo");
@@ -65,7 +63,6 @@ public class MotelServiceImpl
                     img.setPublicUrl(publicId);
                     imgRepo.saveImage(img);
                 } catch (IOException ex) {
-                    Logger.getLogger(MotelServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -95,6 +92,11 @@ public class MotelServiceImpl
     @Override
     public List<Motel> getMotelByUsername(String username) {
         return this.getMotelByUsername(username);
+    }
+    
+    @Override
+    public Map<String, Object> getMotelAPI(Map<String, String> params) {
+        return this.motelRepo.getMotelAPI(params);
     }
     
 }

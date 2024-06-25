@@ -10,6 +10,9 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -38,13 +41,20 @@ public class MotelController {
     
     @PostMapping("/motels")
     public String createProduct(@ModelAttribute(value ="motel")Motel m) {
-        try {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+            // Người dùng đã đăng nhập
+            try {
                 this.motelService.saveOrUpdateMotel(m);
                 return "redirect:/";
             } catch (Exception ex) {
                 System.err.println(ex.getMessage());
             }
         return "motels";
+        } else {
+            return "login";
+        }
+        
     }
     
     @GetMapping("/motels/{motelId}")

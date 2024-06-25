@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  *
@@ -31,7 +30,7 @@ public class UserDetaiController {
     }
     
     @PostMapping("/user")
-    public String createProduct(@ModelAttribute(value ="user")User u) {
+    public String createUser(@ModelAttribute(value ="user")User u) {
         try {
                 this.userService.addUser(u);
                 return "redirect:/";
@@ -41,7 +40,7 @@ public class UserDetaiController {
         return "user";
     }
     
-    @GetMapping("/user/{username}")
+    @GetMapping("/user/{username}/")
     public String updateView(Model model, @PathVariable(value = "username") String username) {
         model.addAttribute("user", this.userService.getUserByUserName(username));
         return "user";

@@ -7,7 +7,7 @@ package com.lvh.services;
 
 /**
  *
- * @author levan
+ * @author 
  */
 public interface MailService {
     void sendMail(String to, String subject, String tex);

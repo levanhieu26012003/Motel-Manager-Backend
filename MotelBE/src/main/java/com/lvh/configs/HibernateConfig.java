@@ -6,6 +6,7 @@ package com.lvh.configs;
 
 import java.util.Properties;
 import javax.sql.DataSource;
+import org.hibernate.cfg.AvailableSettings;
 import static org.hibernate.cfg.AvailableSettings.DIALECT;
 import static org.hibernate.cfg.AvailableSettings.SHOW_SQL;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +59,8 @@ public class HibernateConfig {
         Properties props = new Properties();
         props.put(DIALECT, env.getProperty("hibernate.dialect"));
         props.put(SHOW_SQL, env.getProperty("hibernate.showSql","false"));
+        props.put(AvailableSettings.LOG_SESSION_METRICS, env.getProperty("hibernate.LOG_SESSION_METRICS","false"));
+        props.put(AvailableSettings.GENERATE_STATISTICS, env.getProperty("hibernate.GENERATE_STATISTICS","false"));
         return props;
     }
 

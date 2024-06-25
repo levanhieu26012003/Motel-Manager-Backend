@@ -33,4 +33,9 @@
         <put-attribute name="content" value="/WEB-INF/pages/user.jsp" />
     </definition>
     
+     <definition name="login" extends="baseLayout">
+        <put-attribute name="title" value="Người dùng" />
+        <put-attribute name="content" value="/WEB-INF/pages/login.jsp" />
+    </definition>
+    
 </tiles-definitions>

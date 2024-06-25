@@ -9,8 +9,6 @@ import com.lvh.repositories.FollowRepository;
 import com.lvh.services.UserService;
 import java.util.ArrayList;
 import java.util.List;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
@@ -34,7 +32,7 @@ public class FollowRepositoryImpl implements FollowRepository {
     public List<User> listFollower(Long id) {
         User user = this.userService.getUserById(id);
 
-        return new ArrayList<>(user.getUserCollection());
+        return new ArrayList<>(user.getFollowers());
 
     }
 
@@ -43,25 +41,28 @@ public class FollowRepositoryImpl implements FollowRepository {
     public List<User> listHost(Long id) {
         User user = this.userService.getUserById(id);
 
-        return new ArrayList<>(user.getUserCollection1());
+        return new ArrayList<>(user.getHosts());
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     @Override
-    public void addFollow(Long followerId, Long followedId) {
+    public void addFollow(Long followerId, Long hostId) {
         User follower = userService.getUserById(followerId);
-        User followed = userService.getUserById(followedId);
-
-        follower.getUserCollection().add(followed);
+        User host = userService.getUserById(hostId);
+        System.out.println("ADDD flowww");
+        System.out.println(host.getUsername());
+        System.out.println(follower.getUsername());
+        
+        follower.getFollowers().add(host);
         this.userService.addUser(follower);
     }
-    @Transactional(readOnly = true)
+    @Transactional
     @Override
-    public void removeFollow(Long followerId, Long followedId) {
+    public void removeFollow(Long followerId, Long hostId) {
         User follower = userService.getUserById(followerId);
-        User followed = userService.getUserById(followedId);
+        User host = userService.getUserById(hostId);
 
-        follower.getUserCollection().remove(followed);
+        follower.getFollowers().remove(host);
         this.userService.addUser(follower);
     }
 

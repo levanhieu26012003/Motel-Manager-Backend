@@ -93,8 +93,10 @@ public class MotelRepositoryImpl implements MotelRepository {
         if (toPrice != null && !toPrice.isEmpty()) {
             predicates.add(b.lessThanOrEqualTo(r.get("price"), Double.parseDouble(toPrice)));
         }
+        String sort = params.get("sort")== null ? "id":params.get("sort");
+
         q.where(predicates.toArray(Predicate[]::new));
-        q.orderBy(b.desc(r.get("id")));
+        q.orderBy(b.desc(r.get(sort)));
 
         Query query = s.createQuery(q);
 
@@ -107,16 +109,97 @@ public class MotelRepositoryImpl implements MotelRepository {
         }
         return query.getResultList();
     }
+    
+    @Override
+    public Map<String, Object> getMotelAPI(Map<String, String> params) {
+        Session s = this.factoryBean.getObject().getCurrentSession();
+        CriteriaBuilder b = s.getCriteriaBuilder();
+        CriteriaQuery<Motel> q = b.createQuery(Motel.class);
+        Root<Motel> r = q.from(Motel.class);
+        q.select(r);
+
+        List<Predicate> predicates = new ArrayList<>();
+
+        String wards = params.get("wards");
+        if (wards != null && !wards.isEmpty()) {
+            predicates.add(b.like(r.get("wards"), String.format("%%%s%%", wards)));
+        }
+
+        String district = params.get("district");
+        if (district != null && !district.isEmpty()) {
+            predicates.add(b.like(r.get("district"), String.format("%%%s%%", district)));
+        }
+
+        String province = params.get("province");
+        if (province != null && !province.isEmpty()) {
+            predicates.add(b.like(r.get("province"), String.format("%%%s%%", province)));
+        }
+
+        String fromPrice = params.get("fromPrice");
+        if (fromPrice != null && !fromPrice.isEmpty()) {
+            predicates.add(b.greaterThanOrEqualTo(r.get("price"), Double.parseDouble(fromPrice)));
+        }
+        String sort = params.get("sort")== null ? "id":params.get("sort");
+        String toPrice = params.get("toPrice");
+        if (toPrice != null && !toPrice.isEmpty()) {
+            predicates.add(b.lessThanOrEqualTo(r.get("price"), Double.parseDouble(toPrice)));
+        }
+        q.where(predicates.toArray(new Predicate[0]));
+        q.orderBy(b.desc(r.get(sort)));
+
+        Query<Motel> query = s.createQuery(q);
+
+        String p = params.get("page");
+        int page = p != null && !p.isEmpty() ? Integer.parseInt(p) : 1;
+        int pageSize = Integer.parseInt(env.getProperty("motels.pageSize", "10"));
+        int start = (page - 1) * pageSize;
+
+        query.setFirstResult(start);
+        query.setMaxResults(pageSize);
+
+        List<Motel> motels = query.getResultList();
+        
+        List<Map<String, Object>> motelsMap = new ArrayList<>();
+        for(Motel m:motels){
+            motelsMap.add(this.motelToJson(m));
+        }
+
+        // Tính tổng số phần tử
+        CriteriaQuery<Long> countQuery = b.createQuery(Long.class);
+        Root<Motel> countRoot = countQuery.from(Motel.class);
+        countQuery.select(b.count(countRoot)).where(predicates.toArray(new Predicate[0]));
+        long totalElements = s.createQuery(countQuery).getSingleResult();
+        int totalPages = (int) Math.ceil((double) totalElements / pageSize);
+
+        // Tạo phản hồi
+        Map<String, Object> response = new HashMap<>();
+        response.put("data", motelsMap);
+        response.put("page", page);
+        response.put("size", pageSize);
+        response.put("totalElements", totalElements);
+        response.put("totalPages", totalPages);
+        response.put("first", page == 1);
+        response.put("last", page == totalPages);
+        response.put("nextPage", page < totalPages ? page + 1 : null);
+        response.put("previousPage", page > 1 ? page - 1 : null);
+
+        return response;
+    }
+
 
     @Override
     public void saveOrUpdateMotel(Motel m) {
         Session s = this.factoryBean.getObject().getCurrentSession();
+        
         if (m.getId() != null) {
-            if (m.getStatus() == "PENDING") {
+            if (m.getStatus().equals("PENDING")) {
                 m.setStatus("APPROVED");
-                for (User user : this.followlSer.listFollower(m.getUserId().getId())) {
-                         String subject = "New post approved!";
-                        String text = "A new post by " + m.getUserId().getUsername() + " has been approved. Check it out!";
+                User userHost = this.userService.getUserById(m.getUserId().getId());
+                System.out.println("INN USERRR");
+                System.out.println(userHost.getUsername());
+                for (User user : this.followlSer.listHost(userHost.getId())) {
+                        String subject = "New post !!!";
+                        String text = "Hi " + user.getUsername() +"\nYour host is " + userHost.getUsername() + " has been post a new motel. Check it out!";
                     this.mailSer.sendMail(user.getEmail(), subject, text);
                 }
             }

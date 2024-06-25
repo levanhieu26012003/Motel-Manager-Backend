@@ -31,13 +31,13 @@ public class FollowServiceImpl implements FollowService{
     }
 
     @Override
-    public void addFollow(Long followerId, Long followedId) {
-        this.followRepo.addFollow(followerId, followedId);
+    public void addFollow(Long followerId, Long hostId) {
+        this.followRepo.addFollow(followerId, hostId);
     }
 
     @Override
-    public void removeFollow(Long followerId, Long followedId) {
-        this.followRepo.removeFollow(followerId, followedId);
+    public void removeFollow(Long followerId, Long hostId) {
+        this.followRepo.removeFollow(followerId, hostId);
     }
     
 }
