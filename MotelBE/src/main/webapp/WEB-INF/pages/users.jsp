@@ -5,7 +5,7 @@
 
 <h1 class="text-info text-center">Manage Motels</h1>
 <div>
-    <a class="btn btn-success" href="<c:url value="/user" />">Thêm Nguoi Dung</a>
+    <a class="btn btn-success" href="<c:url value="/user" />">Thêm Người Dùng</a>
 </div>
 <table class="table table-striped">
     <thead>
@@ -19,8 +19,8 @@
     </thead>
     <tbody>
         <c:forEach var="user" items="${users}">
-        <td>
-            <img src="${user.avatar}" width="200" class="img-fluid" />
+        <td width="200px" height="200px">
+            <img src="${user.avatar}" height="100%" class="img-fluid" />
         </td>
         <td>${user.id}</td>
         <td>${user.username}</td>
@@ -29,7 +29,7 @@
 
         <td>
             <a class="btn btn-info" href="<c:url value="/user/${user.username}" />">Xem</a>
-            <button onclick="deleteProduct('${url}',${p.id})" class="btn btn-danger">Xóa</button>
+            <a class="btn btn-danger m-1" href="<c:url value="/user/delete/${user.username}" />">Xóa</a>
         </td>        
     </tr>
 </c:forEach>

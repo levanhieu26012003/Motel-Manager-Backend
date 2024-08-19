@@ -8,40 +8,42 @@
     <form:errors path="*" element="div" cssClass="alert alert-danger" />
 
     <div class="form-floating mb-3 mt-3">
-        <label for="title">Username</label>
         <form:input class="form-control" id="title" path="username" />
+                <label for="title">Username</label>
+
     </div>
 
 
     <div class="form-floating mb-3 mt-3">
-        <label for="title">password</label>
         <form:input class="form-control" id="title" path="password" />
+                <label for="title">password</label>
+
     </div>
 
 
     <div class="form-floating mb-3 mt-3">
-        <label for="title">Email</label>
         <form:input class="form-control"  path="email" />
+                <label for="title">Email</label>
+
     </div>
 
     <div class="form-floating">
-        <label class="form-label">Danh mục:</label>
 
         <form:select class="form-select"  path="userRole">
             <option value="ROLE_USER_TENANT" selected>ROLE_USER_TENANT</option>
             <option value="ROLE_USER_HOST" selected>ROLE_USER_HOST</option>
             <option value="ROLE_ADMIN" selected>ROLE_ADMIN</option>
         </form:select>
+                    <label class="form-label">Danh mục:</label>
+
     </div>
 
 
-    <div class="form-floating mb-3 mt-3 image-container">
+    <div class="form-floating mb-3 mt-3">
         <form:input type="file" class="form-control"  id="image" path="file"  />
 
         <c:if test="${user.id > 0}">
-            <div class="image-wrapper"
-                 <img  src="${user.avatar}" width="200" class="img-fluid" />
-            </div>
+                 <img  src="${user.avatar}" width="200" class="img-fluid m-2" />
         </c:if>
     </div>
 

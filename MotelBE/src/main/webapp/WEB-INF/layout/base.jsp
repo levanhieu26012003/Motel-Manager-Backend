@@ -13,36 +13,69 @@
         <title>
             <tiles:insertAttribute name="title" />
         </title>
-        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">      
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">     
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
         <style>
-            .image-container {
-                display: flex;
-                flex-wrap: wrap;
+            .status-icon {
+                font-size: 1.5em;
             }
-            .image-wrapper {
-                position: relative;
-                margin: 10px;
+            .active-icon {
+                color: green;
             }
-            .image-wrapper img {
-                width: 150px;
-                height: 150px;
+            .inactive-icon {
+                color: red;
             }
-            .image-wrapper .close {
-                position: absolute;
-                top: 5px;
-                right: 5px;
-                background: red;
-                color: white;
-                border: none;
+            .login-container {
+                max-width: 400px;
+                margin: 50px auto;
+                padding: 15px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                background-color: #f9f9f9;
+            }
+            .avatar {
                 border-radius: 50%;
-                cursor: pointer;
-                width: 25px;
-                height: 25px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
+                width: 100px;
+                height: 100px;
+                object-fit: cover;
+            }
+            table th, table td {
+                text-align: center; /* Căn giữa chữ theo chiều ngang */
+                vertical-align: middle; /* Căn giữa chữ theo chiều dọc */
+                /* trang đánh giá*/
+                .user-info {
+                    display: flex;
+                    align-items: center;
+                }
+                .user-info img {
+                    width: 100px;
+                    height: 100px;
+                    border-radius: 50%;
+                    margin-right: 20px;
+                }
+                .reviews {
+                    margin-top: 20px;
+                }
+                .review {
+                    border: 1px solid #ddd;
+                    padding: 10px;
+                    margin-bottom: 10px;
+                }
+                .low-rating {
+                    background-color: #f8d7da;
+                }
             }
         </style>
+        <title>Login Page</title>
+
     </head>
     <body>
         <tiles:insertAttribute name="header" />

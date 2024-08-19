@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -105,14 +106,14 @@ public class Motel implements Serializable {
     @Size(max = 20)
     @Column(name = "status")
     private String status = "PENDING";
-    @OneToMany(mappedBy = "motelId", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "motelId", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Collection<Image> imageCollection;
-    @OneToMany(mappedBy = "houseId")
+    @OneToMany(mappedBy = "houseId", cascade = CascadeType.ALL)
     private Collection<Comment> commentCollection;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private User userId;
-    
+
     @Transient
     private List<MultipartFile> files;
 
@@ -286,8 +287,8 @@ public class Motel implements Serializable {
     public String toString() {
         return "com.lvh.pojo.Motel[ id=" + id + " ]";
     }
-    
-     @PrePersist
+
+    @PrePersist
     protected void onCreate() {
         createdDate = new Date();
         updatedDate = new Date();
@@ -311,5 +312,5 @@ public class Motel implements Serializable {
     public void setFiles(List<MultipartFile> files) {
         this.files = files;
     }
-    
+
 }

@@ -83,7 +83,7 @@ public class CommentRepositoryImpl implements CommentRepository {
     @Override
     public Comment getCommentById(Long id) {
         Session s = this.factoryBean.getObject().getCurrentSession();
-
+        
         return s.get(Comment.class, id);
     }
 

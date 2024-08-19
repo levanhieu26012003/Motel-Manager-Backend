@@ -23,19 +23,29 @@
         <put-attribute name="content" value="/WEB-INF/pages/stats.jsp" />
     </definition>
     
-     <definition name="users" extends="baseLayout">
+    <definition name="users" extends="baseLayout">
         <put-attribute name="title" value="Người dùng" />
         <put-attribute name="content" value="/WEB-INF/pages/users.jsp" />
     </definition>
   
-   <definition name="user" extends="baseLayout">
+    <definition name="user" extends="baseLayout">
         <put-attribute name="title" value="Người dùng" />
         <put-attribute name="content" value="/WEB-INF/pages/user.jsp" />
     </definition>
     
-     <definition name="login" extends="baseLayout">
+    <definition name="login" extends="baseLayout">
         <put-attribute name="title" value="Người dùng" />
         <put-attribute name="content" value="/WEB-INF/pages/login.jsp" />
+    </definition>
+    
+    <definition name="reviews" extends="baseLayout">
+        <put-attribute name="title" value="Người dùng" />
+        <put-attribute name="content" value="/WEB-INF/pages/reviews.jsp" />
+    </definition>
+    
+     <definition name="review" extends="baseLayout">
+        <put-attribute name="title" value="Người dùng" />
+        <put-attribute name="content" value="/WEB-INF/pages/review.jsp" />
     </definition>
     
 </tiles-definitions>

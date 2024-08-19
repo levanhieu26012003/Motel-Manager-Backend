@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,12 +40,12 @@ public class ApiCommentController {
     private CommentSecurityService cmtSecuSer;
 
     @PostMapping(path = "", consumes = {
-        MediaType.APPLICATION_JSON_VALUE,
         MediaType.MULTIPART_FORM_DATA_VALUE
     })
     @ResponseStatus(HttpStatus.CREATED)
     @CrossOrigin
-    public void create(@RequestBody Map<String, String> params) {
+    public void create(@RequestParam Map<String, String> params, Principal p) {
+        params.put("username", p.getName());
         this.cmtSer.saveOrUpdateComment(this.cmtSer.jsonToComment(params));
     }
     

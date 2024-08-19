@@ -232,6 +232,7 @@ public class MotelRepositoryImpl implements MotelRepository {
         Map<String, Object> motelMap = new HashMap<>();
         motelMap.put("id", motel.getId());
         motelMap.put("title", motel.getTitle());
+        motelMap.put("area", motel.getArea());
         motelMap.put("price", motel.getPrice());
         motelMap.put("numberTenant", motel.getNumberTenant());
         motelMap.put("address", motel.getAddress());
@@ -240,7 +241,7 @@ public class MotelRepositoryImpl implements MotelRepository {
         motelMap.put("wards", motel.getWards());
         motelMap.put("createdDate", motel.getCreatedDate());
         motelMap.put("updatedDate", motel.getUpdatedDate());
-        motelMap.put("username", motel.getUserId().getUsername());
+        motelMap.put("username", this.userService.ChangeJson(this.userService.getUserById(motel.getUserId().getId())));
 
         List<Map<String, Object>> imageCollection = new ArrayList<>();
         for (Image img : motel.getImageCollection()) {

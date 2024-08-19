@@ -53,6 +53,9 @@ public class StatsRepositoryImpl implements StatsRepository {
         criteriaQuery.multiselect(periodExpression, userTypeExpression, criteriaBuilder.count(root.get("id")));
         criteriaQuery.where(yearPredicate);
         criteriaQuery.groupBy(periodExpression, userTypeExpression);
+        
+        
+        criteriaQuery.orderBy(criteriaBuilder.asc(periodExpression));
 
         Query query = session.createQuery(criteriaQuery);
         return query.getResultList();

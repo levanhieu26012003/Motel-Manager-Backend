@@ -30,16 +30,11 @@ public class StatsController {
     
     @GetMapping("/stats")
     public String statsView(Model model,@RequestParam Map<String, String> params) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
-           String year = params.getOrDefault("year", String.valueOf(LocalDate.now().getYear()));
+        String year = params.getOrDefault("year", String.valueOf(LocalDate.now().getYear()));
         String period = params.getOrDefault("period", "MONTH");
         model.addAttribute("statsUser", statsService.statsUserByPeriod(Integer.parseInt(year), period));
         
         return "stats";
-        } else {
-            return "login";
-        }
         
     }
 }

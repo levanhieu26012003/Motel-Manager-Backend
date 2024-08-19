@@ -59,13 +59,15 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http)
             throws Exception {
         http.formLogin().usernameParameter("username").passwordParameter("password");
-        
-//        http.authorizeRequests().anyRequest().authenticated();
-        
+
+//        http.authorizeRequests().antMatchers("/login", "/register", "/resources/**", "/css/**", "/js/**").permitAll()
+//                .antMatchers("/**").hasRole("ADMIN") // Chỉ cho phép người dùng có role ADMIN truy cập vào trang admin
+//                .anyRequest().authenticated();
+
         http.formLogin().defaultSuccessUrl("/")
                 .failureUrl("/login?error")
                 .loginPage("/login");
-        
+
         http.logout().logoutSuccessUrl("/login");
 
         http.exceptionHandling()
@@ -92,40 +94,36 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 //    }
     }
 
-        @Bean
-        public Cloudinary cloudinary
-        
-            () {
+    @Bean
+    public Cloudinary cloudinary() {
         Cloudinary cloudinary
-                    = new Cloudinary(ObjectUtils.asMap(
-                            "cloud_name", "dlkfozznl",
-                            "api_key", "216689541712763",
-                            "api_secret", "m_IQI6lLGClNtrf8ZeuG97Do4Fs",
-                            "secure", true));
-            return cloudinary;
-        }
+                = new Cloudinary(ObjectUtils.asMap(
+                        "cloud_name", "dlkfozznl",
+                        "api_key", "216689541712763",
+                        "api_secret", "m_IQI6lLGClNtrf8ZeuG97Do4Fs",
+                        "secure", true));
+        return cloudinary;
+    }
 
-        @Bean
-        public JavaMailSender getJavaMailSend
-        
-            () {
+    @Bean
+    public JavaMailSender getJavaMailSend() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 
-            mailSender.setHost("smtp.gmail.com");
-            mailSender.setPort(587);
-            mailSender.setUsername("levanhieu26012003@gmail.com");
-            mailSender.setPassword("qjpw wfda arwp emls");
+        mailSender.setHost("smtp.gmail.com");
+        mailSender.setPort(587);
+        mailSender.setUsername("levanhieu26012003@gmail.com");
+        mailSender.setPassword("qjpw wfda arwp emls");
 
-            Properties javaMailProperties = new Properties();
+        Properties javaMailProperties = new Properties();
 
-            javaMailProperties.put("mail.smtp.starttls.enable", "true");
-            javaMailProperties.put("mail.smtp.auth", "true");
-            javaMailProperties.put("mail.transport.protocol", "smtp");
-            javaMailProperties.put("mail.debug", "true");
+        javaMailProperties.put("mail.smtp.starttls.enable", "true");
+        javaMailProperties.put("mail.smtp.auth", "true");
+        javaMailProperties.put("mail.transport.protocol", "smtp");
+        javaMailProperties.put("mail.debug", "true");
 
-            mailSender.setJavaMailProperties(javaMailProperties);
+        mailSender.setJavaMailProperties(javaMailProperties);
 
-            return mailSender;
-        }
-
+        return mailSender;
     }
+
+}

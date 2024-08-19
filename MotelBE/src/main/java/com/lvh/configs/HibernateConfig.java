@@ -43,24 +43,20 @@ public class HibernateConfig {
 
     @Bean
     public DataSource dataSource() {
-        DriverManagerDataSource dataSource
-                = new DriverManagerDataSource();
-        dataSource.setDriverClassName(
-                env.getProperty("hibernate.connection.driverClass"));
+        DriverManagerDataSource dataSource= new DriverManagerDataSource();
+        dataSource.setDriverClassName(env.getProperty("hibernate.connection.driverClass"));
         dataSource.setUrl(env.getProperty("hibernate.connection.url"));
-        dataSource.setUsername(
-                env.getProperty("hibernate.connection.username"));
-        dataSource.setPassword(
-                env.getProperty("hibernate.connection.password"));
+        dataSource.setUsername(env.getProperty("hibernate.connection.username"));
+        dataSource.setPassword(env.getProperty("hibernate.connection.password"));
         return dataSource;
     }
 
     private Properties hibernateProperties() {
         Properties props = new Properties();
         props.put(DIALECT, env.getProperty("hibernate.dialect"));
-        props.put(SHOW_SQL, env.getProperty("hibernate.showSql","false"));
-        props.put(AvailableSettings.LOG_SESSION_METRICS, env.getProperty("hibernate.LOG_SESSION_METRICS","false"));
-        props.put(AvailableSettings.GENERATE_STATISTICS, env.getProperty("hibernate.GENERATE_STATISTICS","false"));
+        props.put(SHOW_SQL, env.getProperty("hibernate.showSql", "false"));
+        props.put(AvailableSettings.LOG_SESSION_METRICS, env.getProperty("hibernate.LOG_SESSION_METRICS", "false"));
+        props.put(AvailableSettings.GENERATE_STATISTICS, env.getProperty("hibernate.GENERATE_STATISTICS", "false"));
         return props;
     }
 

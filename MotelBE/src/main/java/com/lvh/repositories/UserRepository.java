@@ -14,11 +14,25 @@ import org.springframework.web.multipart.MultipartFile;
  * @author levan
  */
 public interface UserRepository {
+
     List<User> getUsers();
+
     User getUserByUserName(String username);
+
     User getUserById(Long id);
+
     Map<String, Object> ChangeJson(User user);
-    User jsonToUser(Map<String, String>params, MultipartFile[] file);
+
+    User jsonToUser(Map<String, String> params, MultipartFile[] file);
+
     void saveOrUpdateUser(User user);
+
+    void deleteUser(String username);
+
     boolean authUser(String username, String password);
+
+    public List<User> getUsersByRole(String role);
+    
+    public void changeActive(String username);
+
 }

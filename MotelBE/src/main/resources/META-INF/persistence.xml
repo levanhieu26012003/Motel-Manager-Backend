@@ -7,6 +7,7 @@
     <class>com.lvh.pojo.User</class>
     <class>com.lvh.pojo.Image</class>
     <class>com.lvh.pojo.Motel</class>
+    <class>com.lvh.pojo.Reviews</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/moteldb?zeroDateTimeBehavior=CONVERT_TO_NULL"/>

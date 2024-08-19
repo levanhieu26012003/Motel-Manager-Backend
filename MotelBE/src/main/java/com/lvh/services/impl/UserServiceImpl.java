@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
     public User getUserByUserName(String username) {
         return this.userRepo.getUserByUserName(username);
     }
-    
+
     @Override
     public User getUserById(Long id) {
         return this.userRepo.getUserById(id);
@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void addUser(User user) {
-        if (user.getFile() != null) {
+        if (user.getFile().getSize() > 0) {
             try {
                 Map res = this.cloudinary.uploader().upload(user.getFile().getBytes(), ObjectUtils.asMap("resource_type", "auto"));
                 user.setAvatar(res.get("secure_url").toString());
@@ -90,6 +90,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public User jsonToUser(Map<String, String> params, MultipartFile[] file) {
         return this.userRepo.jsonToUser(params, file);
+    }
+
+    @Override
+    public void deleteUserByUsername(String username) {
+        this.userRepo.deleteUser(username);
+    }
+
+    @Override
+    public List<User> getUsersByRole(String role) {
+        return this.userRepo.getUsersByRole(role);
+    }
+
+    @Override
+    public void changeActive(String username) {
+        userRepo.changeActive(username);   
     }
 
 }

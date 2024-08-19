@@ -45,14 +45,11 @@ public class MotelServiceImpl
     @Transactional
     public void saveOrUpdateMotel(Motel motel) {
         
-        this.motelRepo.saveOrUpdateMotel(motel);
-        
-        System.out.println(motel.getFiles());
+        this.motelRepo.saveOrUpdateMotel(motel);   
         
         if (motel.getFiles().get(0).getSize() > 0) {
             for (MultipartFile image : motel.getFiles()) {
                 Map uploadResult;
-                System.out.println("zzzzzzzzzzoooooooooooo");
                 try {
                     uploadResult = cloudinary.uploader().upload(image.getBytes(), ObjectUtils.emptyMap());
                     String url = (String) uploadResult.get("url");

@@ -52,6 +52,12 @@ import org.springframework.web.multipart.MultipartFile;
     @NamedQuery(name = "User.findByUserRole", query = "SELECT u FROM User u WHERE u.userRole = :userRole"),
     @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email")})
 public class User implements Serializable {
+    @JsonIgnore
+    @OneToMany(mappedBy = "hostId",cascade = CascadeType.ALL, orphanRemoval = true)
+    private Collection<Reviews> reviewsCollection;
+    @JsonIgnore
+    @OneToMany(mappedBy = "tenantId",cascade = CascadeType.ALL, orphanRemoval = true)
+    private Collection<Reviews> reviewsCollection1;
 
     private static long serialVersionUID = 1L;
     @Id
@@ -60,7 +66,7 @@ public class User implements Serializable {
     @Column(name = "id")
     private Long id;
     @Column(name = "active")
-    private Boolean active = true;
+    private Boolean active;
     @Column(name = "created_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
@@ -95,17 +101,17 @@ public class User implements Serializable {
     @ManyToMany
     @JsonIgnore
     private Collection<User> followers;
-    @ManyToMany(mappedBy = "followers")
+    @ManyToMany(mappedBy = "followers",cascade = CascadeType.ALL)
     @JsonIgnore
     private Collection<User> hosts;
-    @OneToMany(mappedBy = "userId")
+    @OneToMany(mappedBy = "userId",cascade = CascadeType.ALL,orphanRemoval = true)
     @JsonIgnore
     private Collection<Searchinfo> searchinfoCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId",orphanRemoval = true)
     @JsonIgnore
     private Collection<Comment> commentCollection;
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId", orphanRemoval = true)
     private Collection<Motel> motelCollection;
     
     @Transient
@@ -116,6 +122,7 @@ public class User implements Serializable {
 
     public User(Long id) {
         this.id = id;
+        this.active = true;
     }
 
     public User(Long id, String username, String password, String email) {
@@ -123,6 +130,7 @@ public class User implements Serializable {
         this.username = username;
         this.password = password;
         this.email = email;
+        this.active = true;
     }
 
     public Long getId() {
@@ -297,6 +305,24 @@ public class User implements Serializable {
      */
     public static long getSerialVersionUID() {
         return serialVersionUID;
+    }
+
+    @XmlTransient
+    public Collection<Reviews> getReviewsCollection() {
+        return reviewsCollection;
+    }
+
+    public void setReviewsCollection(Collection<Reviews> reviewsCollection) {
+        this.reviewsCollection = reviewsCollection;
+    }
+
+    @XmlTransient
+    public Collection<Reviews> getReviewsCollection1() {
+        return reviewsCollection1;
+    }
+
+    public void setReviewsCollection1(Collection<Reviews> reviewsCollection1) {
+        this.reviewsCollection1 = reviewsCollection1;
     }
 
   

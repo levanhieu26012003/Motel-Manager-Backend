@@ -39,6 +39,14 @@ public class UserRepositoryImpl implements UserRepository {
         Query q = s.createNamedQuery("User.findAll");
         return q.getResultList();
     }
+    
+     @Override
+    public List<User> getUsersByRole(String role) {
+        Session s = this.factoryBean.getObject().openSession();
+        Query q = s.createNamedQuery("User.findByUserRole");
+        q.setParameter("userRole", role);
+        return q.getResultList();
+    }
 
     @Override
     public void saveOrUpdateUser(User user) {
@@ -74,9 +82,9 @@ public class UserRepositoryImpl implements UserRepository {
         userMap.put("id", user.getId());
         userMap.put("username", user.getUsername());
         userMap.put("email", user.getEmail());
-        userMap.put("userrole", user.getUserRole());
+        userMap.put("userRole", user.getUserRole());
         userMap.put("avatar", user.getAvatar());
-
+        userMap.put("active", user.getActive());
         return userMap;
     }
 
@@ -89,7 +97,7 @@ public class UserRepositoryImpl implements UserRepository {
         if (params.get("email") != null) {
             u.setEmail(params.get("email"));
         }
-        if (params.get("userrole") != null) {
+        if (params.get("userRole") != null) {
             u.setEmail(params.get("userrole"));
         }
         u.setActive(true);
@@ -109,4 +117,29 @@ public class UserRepositoryImpl implements UserRepository {
         return (User) q.getSingleResult();
     }
 
+    @Override
+    public void deleteUser(String username) {
+        Session s = factoryBean.getObject().getCurrentSession();
+        User u = this.getUserByUserName(username);
+        if (u != null) {
+            s.delete(u);
+        } else {
+            throw new RuntimeException("User not found with ID: " + username);
+        }
+    }
+
+    @Override
+    public void changeActive(String username) {
+        Session s = this.factoryBean.getObject().getCurrentSession();
+        
+        User user = this.getUserByUserName(username);
+        if(user != null)
+        {
+            if(user.getActive())
+                user.setActive(Boolean.FALSE);
+            else
+                 user.setActive(Boolean.TRUE);
+            this.saveOrUpdateUser(user);
+        }
+    }
 }

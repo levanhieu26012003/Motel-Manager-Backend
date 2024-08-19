@@ -14,23 +14,41 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
-            <li class="nav-item m-3">
-                <a class=" " href="<c:url value="/" />">Nhà trọ</a>
+            <li class="nav-item m-3 bg- btn">
+                <a href="<c:url value="/" />">Nhà trọ</a>
             </li>
             
-            <li class="nav-item m-3">
-                <a class="  " href="<c:url value="/users" />">Người dùng</a>
+            <li class="nav-item m-3 bg- btn">
+                <a href="<c:url value="/reviews" />">Đánh giá</a>
             </li>
-           
-            <li class="nav-item m-3 ">
-                <a class="  " href="<c:url value="/stats" />">Thống kê báo cáo</a>
+
+            <li class="nav-item m-3 bg- btn">
+                <a href="<c:url value="/users" />">Người dùng</a>
             </li>
-            
-             <li class="nav-item m-3 ">
-                <a class="  " href="<c:url value="/login" />">Đăng nhập</a>
+
+            <li class="nav-item m-3 bg- btn">
+                <a href="<c:url value="/stats" />">Thống kê báo cáo</a>
             </li>
-            
-            
+
+
+            <c:choose>
+                <c:when test="${pageContext.request.userPrincipal.name == null}">
+                    <li class="nav-item m-3 bg- btn">
+                        <a  href="<c:url value="/login" />">Đăng nhập</a>
+                    </li>
+                </c:when>
+                <c:when test="${pageContext.request.userPrincipal.name != null}">
+                    <li class="nav-item  m-3 bg- btn">
+                        
+                        <a href="<c:url value="/" />">${pageContext.request.userPrincipal.name}</a>
+                    </li>
+                    <li class="nav-item  m-3 bg- btn">
+                        <a href="<c:url value="/logout" />">Đăng xuất</a>
+                    </li>
+                </c:when>
+            </c:choose>
+
+
         </ul>
     </div>
 </nav>

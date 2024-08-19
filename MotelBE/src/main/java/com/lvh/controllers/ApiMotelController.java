@@ -56,7 +56,7 @@ public class ApiMotelController {
         return new ResponseEntity<>(cmtMaps, HttpStatus.OK);
     }
     
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<Map<String, Object>> list(@RequestParam Map<String, String> params) {
 
         return new ResponseEntity<>(this.motelSer.getMotelAPI(params), HttpStatus.OK);

@@ -3,19 +3,19 @@
 
 <!-- Không cần header và footer vì đã được kế thừa từ base.jsp -->
 
-<h1 class="text-info text-center">Manage Motels</h1>
+<h1 class="text-info text-center">QUẢN LÝ NHÀ TRỌ</h1>
 <div>
-    <a class="btn btn-success m-2" href="<c:url value="/motels" />">Thêm sản phẩm</a>
+    <a class="btn btn-success m-2" href="<c:url value="/motels" />">Thêm nhà trọ</a>
 </div>
 <table class="table table-striped">
     <thead>
         <tr>
             <th></th>
             <th>Id</th>
-            <th>Title</th>
-            <th>Address</th>
-            <th>Price</th>
-            <th>Status</th>
+            <th>Nhan đề</th>
+            <th>Địa chỉ</th>
+            <th>Giá</th>
+            <th>Trạng thái</th>
         </tr>
     </thead>
     <tbody>
@@ -30,10 +30,10 @@
         <td>
             <c:choose>
                 <c:when test="${motel.status == 'PENDING'}">
-                    <p class='text-success'>${motel.status}</p>
+                    <p class='text-success'>Chờ xét duyệt</p>
                 </c:when>
                 <c:otherwise>
-                    <p class='text-danger'>${motel.status}</p>
+                    <p class='text-danger'>Đã duyệt</p>
                 </c:otherwise>
         </c:choose>
     </td>
